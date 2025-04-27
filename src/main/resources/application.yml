@@ -1,0 +1,32 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+      url: jdbc:posgresql://localhost:5432/pulsestack_db
+      username: postgres
+      password: postgres
+      driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  kafka:
+    bootstrap-servers: localhost:9092
+  main:
+    allow-circular-references: true
+
+# disable the security on swagger
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+# logging
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+    com.pulsestack: DEBUG
