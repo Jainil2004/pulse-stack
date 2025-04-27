@@ -1,6 +1,7 @@
 package com.pulsestack.config;
 
 import com.pulsestack.service.JwtService;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.*;
@@ -36,13 +37,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (token != null && token.startsWith("Bearer ")) {
             try {
                 token = token.substring(7); // remove the bearer prefix
-                String username = jwtService.validateToken(token);
+                Claims claims = jwtService.extractAllClaims(token);
+                String username = claims.getSubject();
+                String role = claims.get("role", String.class);
 
-                if (username != null) {
+                if (username != null && role != null) {
                     UsernamePasswordAuthenticationToken authentication =
                             new UsernamePasswordAuthenticationToken(username,
                                     null,
-                                    Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
+                                    Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role))
                             );
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }

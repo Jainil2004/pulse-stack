@@ -22,8 +22,14 @@ public class SecurityConfig {
                         "/swagger-ui/**",
                         "/v3/api-docs/**",
                         "/api/health",
-                        "/api/auth/**"
-                ).permitAll().anyRequest().authenticated()).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                        "/api/auth/**",
+                        "/h2-console/**"
+                ).permitAll()
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                .requestMatchers(("/api/user/**")).hasRole("USER")
+                .anyRequest().authenticated()).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .headers().frameOptions().disable();
+
         return http.build();
     }
 

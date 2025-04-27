@@ -4,7 +4,6 @@ import com.pulsestack.model.Role;
 import com.pulsestack.model.User;
 import com.pulsestack.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +31,6 @@ public class AuthenticationService {
             throw new RuntimeException("invalid credentials");
         }
 
-        return jwtService.generateToken(username);
+        return jwtService.generateToken(username, user.getRole().name());
     }
 }
