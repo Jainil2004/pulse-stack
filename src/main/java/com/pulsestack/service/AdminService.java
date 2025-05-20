@@ -52,7 +52,7 @@ public class AdminService {
 
     public boolean deleteUserById(Long id) {
         userRepository.deleteById(id);
-        return !userRepository.countById(id);
+        return !userRepository.existsById(id); // updated based on the issue detected in integration testing
     }
 
     public UserDto updateUserRole(Long id, String newRole) {
