@@ -46,4 +46,23 @@ public class JwtService {
                 .parseClaimsJws(token)
                 .getBody();
     }
+
+//    method for generating a permanent JWT token for the system
+    public String generateTokenForSystem(String systemId) {
+        long nowMillis = System.currentTimeMillis();
+        long expMillis = nowMillis + (1000L * 60 * 60 * 24 * 365 * 10); // 10 years bro
+
+        return Jwts.builder()
+                .setSubject(systemId)
+                .claim("type", "system")
+                .setIssuedAt(new Date(nowMillis))
+                .setExpiration(new Date(expMillis))
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .compact();
+    }
+
+//    method for extracting systemId
+    public String extractSystemId(String token) {
+        return extractAllClaims(token).getSubject();
+    }
 }

@@ -1,7 +1,11 @@
 package com.pulsestack;
 
 import com.pulsestack.model.Role;
+import com.pulsestack.model.System;
 import com.pulsestack.model.User;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 public final class TestDataUtil {
     public TestDataUtil() {
@@ -42,5 +46,32 @@ public final class TestDataUtil {
                 .password("adminUser1")
                 .role(Role.ADMIN)
                 .build();
+    }
+
+    public static System createSystem1() {
+        return System.builder()
+//                .id(1L)
+//                .systemId(UUID.randomUUID().toString())
+                .name("system1")
+                .registeredAt(LocalDateTime.now())
+                .user(TestDataUtil.createNormalUser1()).build();
+    }
+
+    public static System createSystem2() {
+        return System.builder()
+//                .id(2L)
+//                .systemId(UUID.randomUUID().toString())
+                .name("system2")
+                .registeredAt(LocalDateTime.now())
+                .user(TestDataUtil.createNormalUser2()).build();
+    }
+
+    public static System createSystem3() {
+        return System.builder()
+//                .id(3L)
+//                .systemId(UUID.randomUUID().toString())
+                .name("system3")
+                .registeredAt(LocalDateTime.now())
+                .user(TestDataUtil.createNormalUser1()).build();
     }
 }

@@ -3,6 +3,7 @@ package com.pulsestack.repositories;
 import com.pulsestack.TestDataUtil;
 import com.pulsestack.model.User;
 import com.pulsestack.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@Transactional
 public class UserRepositoryIntegrationTests {
 
     @Autowired
