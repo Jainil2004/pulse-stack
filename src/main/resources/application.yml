@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8081 # changed because jupyter utilizes 8080 as well
 
 spring:
   datasource:
@@ -15,7 +15,10 @@ spring:
       hibernate:
         format_sql: true
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: localhost:29092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
   main:
     allow-circular-references: true
 

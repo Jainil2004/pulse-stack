@@ -23,7 +23,8 @@ public class SecurityConfig {
                         "/v3/api-docs/**",
                         "/api/health",
                         "/api/auth/**",
-                        "/h2-console/**"
+                        "/h2-console/**",
+                        "/api/systems/ingest" // added for unauthenticated access to the ingest endpoint
                 ).permitAll()
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 .requestMatchers(("/api/user/**")).hasRole("USER")

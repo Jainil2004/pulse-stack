@@ -1,5 +1,6 @@
 package com.pulsestack.controller;
 
+import com.pulsestack.dto.MetricsIngestRequest;
 import com.pulsestack.dto.SystemDto;
 import com.pulsestack.service.SystemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,5 +82,11 @@ public class SystemController {
     @GetMapping("/{systemId}")
     public ResponseEntity<SystemDto> getSystemDetailsUsingSystemId(@PathVariable String systemId) {
         return ResponseEntity.ok(systemService.getSystemUsingSystemId(systemId));
+    }
+
+    @PostMapping("/ingest")
+    public ResponseEntity<?> ingestMetrics(@RequestBody MetricsIngestRequest request) {
+        systemService.ingestMetrics(request);
+        return ResponseEntity.ok("ingestion successful");
     }
 }

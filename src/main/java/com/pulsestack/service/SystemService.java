@@ -1,24 +1,25 @@
 package com.pulsestack.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pulsestack.dto.MetricsIngestRequest;
 import com.pulsestack.dto.SystemDto;
 import com.pulsestack.model.User;
 import com.pulsestack.repository.SystemRepository;
 import com.pulsestack.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.pulsestack.model.System;
-
+import org.springframework.web.server.ResponseStatusException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
-import java.util.Base64;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,13 +28,17 @@ public class SystemService {
     private final UserRepository userRepository;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
+    private final KafkaTemplate<String, String> kafkaTemplate;
+    private final ObjectMapper objectMapper;
 
     @Autowired
-    public SystemService(SystemRepository systemRepository, UserRepository userRepository, JwtService jwtService, PasswordEncoder passwordEncoder) {
+    public SystemService(SystemRepository systemRepository, UserRepository userRepository, JwtService jwtService, PasswordEncoder passwordEncoder, KafkaTemplate<String, String> kafkaTemplate, ObjectMapper objectMapper) {
         this.systemRepository = systemRepository;
         this.userRepository = userRepository;
         this.jwtService = jwtService;
         this.passwordEncoder = passwordEncoder;
+        this.kafkaTemplate = kafkaTemplate;
+        this.objectMapper = objectMapper;
     }
 
     public User getCurrentUser() {
@@ -132,5 +137,95 @@ public class SystemService {
                 .systemId(system.get().getSystemId())
                 .username(system.get().getUser().getUsername())
                 .build();
+    }
+
+    public boolean validateMetricTypes(Map<String, Object> actualPayload) {
+        Map<String, Class<?>> expectedMetricsTypes_dev = Map.ofEntries(
+                Map.entry("timestamp", String.class),
+                Map.entry("Core_VIDs_avg_V", Number.class),
+                Map.entry("Core_Clocks_avg_MHz", Number.class),
+                Map.entry("Ring_LLC_Clock_MHz", Number.class),
+                Map.entry("Core_Usage_avg_percent", Number.class),
+                Map.entry("Core_Temperatures_avg_C", Number.class),
+                Map.entry("Core_Distance_to_TjMAX_avg_C", Number.class),
+                Map.entry("CPU_Package_C", Number.class),
+                Map.entry("CPU_Package_Power_W", Number.class),
+                Map.entry("PL1_Power_Limit_Static_W", Number.class),
+                Map.entry("PL1_Power_Limit_Dynamic_W", Number.class),
+                Map.entry("PL2_Power_Limit_Static_W", Number.class),
+                Map.entry("PL2_Power_Limit_Dynamic_W", Number.class),
+                Map.entry("CPU_FAN_RPM", Number.class),
+                Map.entry("GPU_FAN_RPM", Number.class)
+        );
+
+        // Reject any unexpected fields
+        for (String key : actualPayload.keySet()) {
+            if (!expectedMetricsTypes_dev.containsKey(key)) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        String.format("unexpected field '%s' in payload", key));
+            }
+        }
+
+        for (Map.Entry<String, Class<?>> entry : expectedMetricsTypes_dev.entrySet()) {
+            String key = entry.getKey();
+            Class<?> expectedType = entry.getValue();
+            Object value = actualPayload.get(key);
+
+            if (value != null && !expectedType.isInstance(value)) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        String.format("invalid type for '%s'. expected type: '%s', got '%s'", key, expectedType.getSimpleName(), value.getClass().getSimpleName()));
+            }
+        }
+
+        return true;
+    }
+
+    public void ingestMetrics(MetricsIngestRequest request) {
+        String token = request.getAuthToken();
+        String systemId = request.getSystemId();
+
+        String extractedSystemId;
+        try {
+            extractedSystemId = jwtService.extractSystemId(token);
+        } catch (Exception e) {
+            throw new RuntimeException("Invalid or expired token");
+        }
+
+        if (!extractedSystemId.equals(systemId)) {
+            throw new RuntimeException("System ID mismatch between token and request");
+        }
+
+        System system = systemRepository.findBySystemId(systemId).orElseThrow(() -> new RuntimeException("system not found"));
+
+        String hashedToken;
+        try {
+            hashedToken = hashWithSHA256(token);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("token hashing failed", e);
+        }
+
+        if (!hashedToken.equals(system.getAuthToken())) {
+            throw new RuntimeException("Token mismatch for system: " + systemId);
+        }
+
+        Map<String, Object> payload = request.getMetricsPayload();
+
+        if (validateMetricTypes(payload)) {
+            Map<String, Object> enrichedPayload = new HashMap<>(request.getMetricsPayload());
+            enrichedPayload.put("systemId", systemId);
+            enrichedPayload.put("username", system.getUser().getUsername());
+
+            String payloadJson;
+            try {
+                payloadJson = objectMapper.writeValueAsString(enrichedPayload);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException("Failed to serialize metrics payload", e);
+            }
+
+            String ingestionTopic = "metricsIngestion";
+            String key = systemId;
+
+            kafkaTemplate.send(ingestionTopic, key, payloadJson);
+        }
     }
 }
