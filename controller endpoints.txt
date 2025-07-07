@@ -1,0 +1,26 @@
+controller endpoints
+
+user controller:
+PUT: /api/user/profile/update-profile
+GET: /api/user/profile
+DELETE: /api/user/delete-account
+
+admin controller:
+GET: /api/admin/users/{id}
+PUT: /api/admin/users/{id}
+DELETE: /api/admin/users/{id}
+PUT: /api/admin/users/{id}/role
+GET: /api/admin/users
+
+System Controller:
+POST: /api/systems/register
+POST: /api/systems/ingest
+PATCH: /api/systems/update/{originalName}
+GET: /api/systems
+GET: /api/systems/{systemId}
+GET: /api/systems/get/{systemName}
+DELETE: /api/systems/{systemName}
+
+Authentication controller:
+POST: /api/auth/register
+POST: /api/auth/login

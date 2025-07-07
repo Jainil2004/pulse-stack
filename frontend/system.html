@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>System Panel</title>
+  <link rel="stylesheet" href="./CSS/index2.css" />
+  <script src="./JS/system.js" defer></script>
+</head>
+<body>
+  <section class="navPanel">
+    <div class="header">
+      <header>Navigation Panel</header>
+    </div>
+    <nav>
+      <a href="home.html">Home</a>
+      <a href="user.html">User</a>
+      <a href="system.html" class="active">Manage Machine</a>
+      <a href="http://localhost:5601" target="_blank">Advanced Data Analytics</a>
+    </nav>
+  </section>
+
+  <section class="pageDesPanel">
+    <div class="header">
+      <header>Machine Control Panel</header>
+    </div>
+
+    <div class="userDetails" id="userDetails">
+      Loading user details...
+    </div>
+
+    <!-- System Registration Section -->
+    <div class="sysPanel" style="grid-template-columns: 100%; margin-bottom: 2%; padding: 15px;">
+      <div style="padding: 15px;">
+        <h3 style="text-align: center; margin-bottom: 12px; color: #f0f0f0; font-size: 1.3em;">Register New Machine</h3>
+        <div style="display: flex; gap: 8px; align-items: center; justify-content: center; max-width: 500px; margin: 0 auto;">
+          <input type="text" id="systemName" placeholder="Enter System Name" style="flex: 1; max-width: 250px; font-size: 0.9em;" />
+          <button id="registerBtn" style="padding: 10px 15px; font-size: 0.9em;">Register</button>
+        </div>
+        <div id="registerResult" style="margin-top: 12px; padding: 12px; border-radius: 8px; background-color: rgba(26, 26, 26, 0.8); display: none; font-size: 0.85em; max-width: 100%; overflow: hidden; box-sizing: border-box;">
+        </div>
+      </div>
+    </div>
+
+    <!-- Systems List Section -->
+    <div class="sysPanel" style="grid-template-columns: 100%;">
+      <div style="overflow-x: auto;">
+        <h3 style="text-align: center; margin-bottom: 15px; color: #f0f0f0; font-size: 1.3em;">Your Registered Machines</h3>
+        <table id="systemTable">
+          <thead>
+            <tr>
+              <th>Machine Name</th>
+              <th>Registered At</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- JS will populate -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

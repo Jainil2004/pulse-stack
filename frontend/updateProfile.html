@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Update Username</title>
+  <link rel="stylesheet" href="./CSS/index2.css" />
+  <script src="./JS/updateProfile.js" defer></script>
+</head>
+<body>
+  <section class="navPanel">
+    <div class="header">
+      <header>Navigation Panel</header>
+    </div>
+    <nav>
+      <a href="home.html">Home</a>
+      <a href="user.html">User</a>
+      <a href="admin.html">Admin</a>
+      <a href="updateProfile.html" class="active">Update Profile</a>
+    </nav>
+  </section>
+
+  <section class="pageDesPanel">
+    <div class="header">
+      <header>Update Username</header>
+    </div>
+
+    <div class="userDetails" id="userDetails">
+      Loading user details...
+    </div>
+
+    <div class="sysPanel" style="grid-template-columns: 100%;">
+      <form id="updateForm" style="display: flex; flex-direction: column; gap: 1rem; align-items: center;">
+        <input type="text" id="newUsername" placeholder="Enter new username" required />
+        <button type="submit">Update Username</button>
+      </form>
+      <div id="message" style="text-align: center; font-weight: bold; margin-top: 1rem; padding: 10px; border-radius: 10px; background-color: rgba(34, 34, 34, 0.8);"></div>
+    </div>
+  </section>
+</body>
+</html>

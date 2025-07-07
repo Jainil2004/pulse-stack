@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Update System</title>
+  <link rel="stylesheet" href="./CSS/index2.css" />
+  <script type="module" src="./JS/update_system.js"></script>
+</head>
+<body>
+  <section class="navPanel">
+    <div class="header">
+      <header>Navigation Panel</header>
+    </div>
+    <nav>
+      <a href="home.html">Home</a>
+      <a href="system.html">Return to Machines</a>
+    </nav>
+  </section>
+
+  <section class="pageDesPanel">
+    <div class="header">
+      <header>Update System</header>
+    </div>
+
+    <div class="userDetails" id="userDetails">
+      Loading user details...
+    </div>
+
+    <div class="sysPanel" style="grid-template-columns: 100%;">
+      <div style="padding: 20px;">
+        <h3 style="text-align: center; margin-bottom: 20px; color: #f0f0f0; font-size: 1.3em;">Update System Name</h3>
+        
+        <form id="updateForm" style="display: flex; flex-direction: column; gap: 15px; align-items: center; max-width: 500px; margin: 0 auto;">
+          <div style="width: 100%;">
+            <label for="currentName" style="display: block; margin-bottom: 5px; font-weight: bold; color: #e0e0e0;">Current System Name:</label>
+            <input type="text" id="currentName" disabled style="width: 100%; padding: 12px; font-size: 0.9em; box-sizing: border-box;">
+          </div>
+
+          <div style="width: 100%;">
+            <label for="newName" style="display: block; margin-bottom: 5px; font-weight: bold; color: #e0e0e0;">New System Name:</label>
+            <input type="text" id="newName" placeholder="Enter new system name" required style="width: 100%; padding: 12px; font-size: 0.9em; box-sizing: border-box;">
+          </div>
+
+          <button type="submit" style="padding: 12px 30px; font-size: 1em; margin-top: 10px;">Update System</button>
+        </form>
+
+        <div id="updateResult" style="margin-top: 20px; padding: 15px; border-radius: 8px; background-color: rgba(26, 26, 26, 0.8); display: none; font-size: 0.9em;">
+        </div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

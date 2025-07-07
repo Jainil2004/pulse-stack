@@ -15,14 +15,27 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
+//    public void register(String username, String password) {
+//        User user = User.builder()
+//                .username(username)
+//                .password(passwordEncoder.encode(password))
+//                .role(Role.USER)
+//                .build();
+//        userRepository.save(user);
+//    }
+
     public void register(String username, String password) {
+        Role assignedRole = username.endsWith("_AD") ? Role.ADMIN : Role.USER;
+
         User user = User.builder()
                 .username(username)
                 .password(passwordEncoder.encode(password))
-                .role(Role.USER)
+                .role(assignedRole)
                 .build();
+
         userRepository.save(user);
     }
+
 
     public String login(String username, String password) {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("user not found"));

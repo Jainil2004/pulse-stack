@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home</title>
+  <link rel="stylesheet" href="./CSS/index2.css" />
+  <script type="module" src="./JS/home.js"></script>
+</head>
+<body>
+  <section class="navPanel">
+    <div class="header">
+      <header>Navigation Panel</header>
+    </div>
+    <nav>
+      <a href="home.html" class="active">Home</a>
+      <a href="user.html">User</a>
+      <a href="admin.html">Admin</a>
+      <a href="system.html">Manage Machine</a>
+    </nav>
+  </section>
+
+  <section class="pageDesPanel">
+    <div class="header">
+      <header>RTHMA (codename - PulseStack)</header>
+    </div>
+    <div id="userDetails" class="userDetails">
+        Loading user details...
+    </div>
+
+    <div class="sysPanel" style="grid-template-columns: repeat(3, 30%); gap: 5%; margin-top: 5%;">
+      <div class="panelButton" id="user-panel">User Panel</div>
+      <div class="panelButton" id="admin-panel">Admin Panel</div>
+      <div class="panelButton" id="system-panel">Machine Panel</div>
+    </div>
+  </section>
+</body>
+</html>

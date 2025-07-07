@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="./CSS/index2.css" />
+    <script type="module" src="./JS/user.js"></script>
+    <title>User Panel</title>
+</head>
+<body>
+    <section class="navPanel">
+        <div class="header">
+            <header>Navigation Panel</header>
+        </div>
+        <nav>
+            <a href="home.html">Home</a>
+            <a href="user.html" class="active">User</a>
+            <a href="system.html">Manage Machine</a>
+        </nav>
+    </section>
+
+    <section class="pageDesPanel">
+        <div class="header">
+            <header>User Profile</header>
+        </div>
+
+        <div class="userDetails" id="userDetails">
+            Loading user profile...
+        </div>
+
+        <div class="sysPanel" style="grid-template-columns: repeat(3, 30%); gap: 5%;">
+            <div>
+                <button onclick="updateProfile()" class="navButton">Update Profile</button>
+            </div>
+            <div>
+                <button onclick="logout()" class="navButton" style="background-color: rgba(102, 102, 51, 0.9);">Logout</button>
+            </div>
+            <div>
+                <button onclick="deleteAccount()" class="navButton" style="background-color: darkred;">Delete Account</button>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

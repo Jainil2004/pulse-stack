@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="./CSS/index2.css" />
+  <script src="./JS/admin.js" defer></script>
+</head>
+<body>
+  <section class="navPanel">
+    <div class="header">
+      <header>Navigation Panel</header>
+    </div>        <nav>
+            <a href="home.html">Home</a>
+            <a href="user.html">User</a>
+            <a href="admin.html" class="active">Admin</a>
+            <a href="system.html">Manage Machine</a>
+        </nav>
+  </section>    <section class="pageDesPanel">
+        <div class="header">
+            <header>Admin Control Panel</header>
+        </div>
+
+        <div class="userDetails" id="userDetails">
+            Loading admin details...
+        </div>
+
+        <div class="sysPanel" style="grid-template-columns: 100%;">
+            <div style="overflow-x: auto;">
+                <table border="1" style="width: 100%; text-align: center;" id="userTable">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Username</th>
+              <th>Role</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

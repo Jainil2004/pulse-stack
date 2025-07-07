@@ -1,0 +1,105 @@
+body {
+  background: linear-gradient(to bottom, #13133e, #3e3e49);
+  color: #e0e0e0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  justify-content: space-between;
+  padding: 2%;
+  margin: 0;
+}
+
+/* Navigation Panel */
+.navPanel {
+  width: 20%;
+  height: 84vh;
+  background-color: rgba(20, 20, 20, 0.3);
+  border-radius: 20px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+  padding: 2%;
+}
+
+/* Main Content Panel */
+.pageDesPanel {
+  width: 75%;
+  height: 84vh;
+  background-color: rgba(20, 20, 20, 0.3);
+  border-radius: 20px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+  padding: 2%;
+}
+
+/* Header Style */
+.header {
+  text-align: center;
+  font-size: 4vh;
+  color: #f0f0f0;
+  padding: 2% 0;
+  border-radius: 20px;
+}
+
+.userDetails {
+  text-align: center;
+  font-size: 2.5vh;
+  font-weight: bold;
+  margin-top: 1%;
+  color: #e0e0e0;
+  background-color: rgba(34, 34, 34, 0.8);
+  padding: 1%;
+  border-radius: 20px;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+
+/* Navigation Links */
+nav a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 90%;
+  height: 10%;
+  background-color: rgba(34, 34, 34, 0.8);
+  color: #e0e0e0;
+  border-radius: 20px;
+  text-decoration: none;
+  font-size: 1.2vw;
+  font-weight: bold;
+  margin-top: 5%;
+  transition: background 0.3s;
+}
+
+nav a:hover {
+  background-color: rgba(51, 51, 51, 0.8);
+}
+
+/* Button Grid */
+.sysPanel {
+  display: grid;
+  grid-template-columns: repeat(3, 30%);
+  gap: 5%;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5%;
+  background-color: rgba(26, 26, 26, 0.8);
+  padding: 5%;
+  border-radius: 20px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Panel Buttons */
+.panelButton {
+  background-color: rgba(34, 34, 34, 0.9);
+  padding: 20%;
+  border-radius: 20px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.5vw;
+  color: #e0e0e0;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.panelButton:hover {
+  background-color: rgba(51, 51, 51, 0.9);
+  transform: scale(1.03);
+}
