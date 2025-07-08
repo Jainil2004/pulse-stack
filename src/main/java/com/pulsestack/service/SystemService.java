@@ -142,6 +142,8 @@ public class SystemService {
     public boolean validateMetricTypes(Map<String, Object> actualPayload) {
         Map<String, Class<?>> expectedMetricsTypes_dev = Map.ofEntries(
                 Map.entry("timestamp", String.class),
+
+                // === CPU Metrics ===
                 Map.entry("Core_VIDs_avg_V", Number.class),
                 Map.entry("Core_Clocks_avg_MHz", Number.class),
                 Map.entry("Ring_LLC_Clock_MHz", Number.class),
@@ -155,7 +157,16 @@ public class SystemService {
                 Map.entry("PL2_Power_Limit_Static_W", Number.class),
                 Map.entry("PL2_Power_Limit_Dynamic_W", Number.class),
                 Map.entry("CPU_FAN_RPM", Number.class),
-                Map.entry("GPU_FAN_RPM", Number.class)
+                Map.entry("GPU_FAN_RPM", Number.class),
+
+                // === GPU Metrics ===
+                Map.entry("GPU_Temperature", Number.class),
+                Map.entry("GPU_Thermal_Limit", Number.class),
+                Map.entry("GPU_Core_Voltage", Number.class),
+                Map.entry("GPU_Power", Number.class),
+                Map.entry("GPU_Clock", Number.class),
+                Map.entry("GPU_Core_Load", Number.class),
+                Map.entry("GPU_Memory_Usage", Number.class)
         );
 
         // Reject any unexpected fields
