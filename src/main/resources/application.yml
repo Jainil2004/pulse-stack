@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-      url: jdbc:posgresql://localhost:5432/pulsestack_db
+      url: jdbc:postgresql://localhost:5432/pulsestack_db
       username: postgres
       password: postgres
       driver-class-name: org.postgresql.Driver
