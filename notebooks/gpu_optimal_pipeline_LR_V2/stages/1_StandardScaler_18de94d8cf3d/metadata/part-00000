@@ -1,1 +1,0 @@
-{"class":"org.apache.spark.ml.feature.StandardScalerModel","timestamp":1751879120793,"sparkVersion":"3.3.0","uid":"StandardScaler_18de94d8cf3d","paramMap":{"withMean":true,"withStd":true,"outputCol":"scaledFeatures","inputCol":"gpu_features"},"defaultParamMap":{"withMean":false,"withStd":true,"outputCol":"StandardScaler_18de94d8cf3d__output"}}
