@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### CPU and GPU models ###
+pulsestack/notebooks/model1/
+pulsestack/notebooks/gpu_optimal_pipeline_LR_V2/

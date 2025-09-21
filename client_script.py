@@ -146,26 +146,14 @@ def simulate_machine(system_id, auth_token):
                 # Process new records only
                 records_processed = 0
                 for row_num, row in enumerate(reader, start=last_processed_offset + 1):
-                    # Use Date + Time as unique identifier
-                    date_val = row.get('Date', '')
-                    time_val = row.get('Time', '')
-                    
-                    if not date_val or not time_val:
-                        print(f"Row {row_num}: Skipping row with missing date/time")
+                    timestamp = row.get('Date/Time')
+
+                    # Check if the timestamp was found
+                    if not timestamp or not timestamp.strip():
+                        print(f"Row {row_num}: Skipping row with missing 'Date/Time' field")
                         continue
 
-                    # Merge Date + Time and format to ISO
-                    try:
-                        # Fix time format: handle 16:53:1.933 by taking only H:M:S part
-                        time_parts = time_val.split('.')
-                        time_clean = time_parts[0]  # Just take H:M:S, ignore fractional seconds
-                        
-                        # Parse with the corrected format (no fractional seconds)
-                        timestamp = datetime.strptime(f"{date_val} {time_clean}", "%d.%m.%Y %H:%M:%S").isoformat()
-                        print(f"Row {row_num}: Processing timestamp: {timestamp}")
-                    except ValueError as e:
-                        print(f"Row {row_num}: Error parsing timestamp '{date_val} {time_val}': {e}")
-                        continue
+                    print(f"Row {row_num}: Processing timestamp: {timestamp}")
 
                     metrics = {"timestamp": timestamp}
                     metrics_found = 0
