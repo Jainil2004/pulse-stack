@@ -1,12 +1,19 @@
 package com.pulsestack.controller;
 
+import com.pulsestack.dto.ConfigFile;
 import com.pulsestack.dto.MetricsIngestRequest;
 import com.pulsestack.dto.SystemDto;
 import com.pulsestack.service.SystemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Map;
@@ -23,8 +30,17 @@ public class SystemController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<SystemDto> registerSystem(@RequestParam String systemName) throws NoSuchAlgorithmException {
-        return ResponseEntity.ok(systemService.registerSystem(systemName));
+    public ResponseEntity<Resource> registerSystem(@RequestParam String systemName) throws NoSuchAlgorithmException {
+        ConfigFile cfg = systemService.registerSystem(systemName);
+        Resource resource = new ByteArrayResource(cfg.content());
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"" + cfg.filename() + "\"")
+                // octet-stream guarantees download; json is also fine, but octet-stream avoids preview
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .cacheControl(org.springframework.http.CacheControl.noStore())
+                .body(resource);
     }
 
     @GetMapping()

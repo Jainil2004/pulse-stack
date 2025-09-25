@@ -2,6 +2,7 @@ package com.pulsestack.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pulsestack.dto.ConfigFile;
 import com.pulsestack.dto.MetricsIngestRequest;
 import com.pulsestack.dto.SystemDto;
 import com.pulsestack.model.User;
@@ -53,7 +54,7 @@ public class SystemService {
         return Base64.getEncoder().encodeToString(hashBytes);
     }
 
-    public SystemDto registerSystem(String name) throws NoSuchAlgorithmException {
+    public ConfigFile registerSystem(String name) throws NoSuchAlgorithmException {
         User currentUser = getCurrentUser();
         Optional<System> isAlreadyRegistered = systemRepository.findSystemByName(name);
         if (isAlreadyRegistered.isPresent()) {
@@ -73,7 +74,30 @@ public class SystemService {
                 .build();
 
         systemRepository.save(system);
-        return new SystemDto(system.getSystemId(), system.getName(), system.getRegisteredAt(), system.getUser().getUsername(), machineAuthToken);
+        // build JSON config in-memory
+        record Cfg(String systemName, String systemId, String jwtToken,
+                   String csvFilePath, String offsetFile, double sendDelay) {}
+
+        Cfg cfg = new Cfg(
+                system.getName(),
+                system.getSystemId(),
+                machineAuthToken,
+                "test1.csv",
+                "last_processed_offset.txt",
+                1.0
+        );
+
+        byte[] content;
+        try {
+            content = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsBytes(cfg);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to serialize client config", e);
+        }
+
+        String safeName = system.getName().replaceAll("[^a-zA-Z0-9._-]", "_");
+        String filename = "client-config-" + safeName + ".json";
+
+        return new ConfigFile(content, filename);
     }
 
     public List<SystemDto> getAllSystems() {

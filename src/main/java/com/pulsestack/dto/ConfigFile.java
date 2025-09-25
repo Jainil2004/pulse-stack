@@ -1,4 +1,4 @@
 package com.pulsestack.dto;
 
-public class ConfigFile {
+public record ConfigFile(byte[] content, String filename) {
 }
