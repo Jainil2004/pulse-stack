@@ -11,6 +11,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.Path;
@@ -105,4 +106,13 @@ public class SystemController {
         systemService.ingestMetrics(request);
         return ResponseEntity.ok("ingestion successful");
     }
+
+    @GetMapping("/dashboard/live/{systemId}")
+    public ResponseEntity<List<Map<String, Object>>> getLiveDashboardLogs(@PathVariable String systemId) {
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        List<Map<String, Object>> logs = systemService.getDashboardLogsForUserAndSystem(username, systemId);
+        return ResponseEntity.ok(logs);
+    }
+
 }

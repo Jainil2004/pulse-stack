@@ -1,5 +1,6 @@
 package com.pulsestack.service;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pulsestack.dto.ConfigFile;
@@ -8,6 +9,7 @@ import com.pulsestack.dto.SystemDto;
 import com.pulsestack.model.User;
 import com.pulsestack.repository.SystemRepository;
 import com.pulsestack.repository.UserRepository;
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -23,6 +25,10 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.stream.Collectors;
+import org.springframework.kafka.annotation.KafkaListener;
+
 @Service
 public class SystemService {
     private final SystemRepository systemRepository;
@@ -31,6 +37,8 @@ public class SystemService {
     private final PasswordEncoder passwordEncoder;
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final ObjectMapper objectMapper;
+    private final ConcurrentLinkedQueue<Map<String, Object>> dashboardQueue = new ConcurrentLinkedQueue<>();
+    private static final int MAX_QUEUE_SIZE = 100;
 
     @Autowired
     public SystemService(SystemRepository systemRepository, UserRepository userRepository, JwtService jwtService, PasswordEncoder passwordEncoder, KafkaTemplate<String, String> kafkaTemplate, ObjectMapper objectMapper) {
@@ -263,4 +271,32 @@ public class SystemService {
             kafkaTemplate.send(ingestionTopic, key, payloadJson);
         }
     }
+
+    public void consumeDashboardLog(String message) {
+        try {
+            Map<String, Object> logEntry = objectMapper.readValue(message, new TypeReference<>() {});
+            if (dashboardQueue.size() >= MAX_QUEUE_SIZE) {
+                dashboardQueue.poll();
+            }
+            dashboardQueue.offer(logEntry);
+        } catch (JsonProcessingException ignored) {
+//            System.out.println("issue with JSON processing");
+        }
+    }
+
+    public List<Map<String, Object>> getDashboardLogsForUserAndSystem(String username, String systemId) {
+        // Verify the system belongs to the user
+        System system = systemRepository.findBySystemId(systemId)
+                .orElseThrow(() -> new RuntimeException("System not found"));
+
+        if (!system.getUser().getUsername().equals(username)) {
+            throw new RuntimeException("Unauthorized access to system data");
+        }
+
+        // Filter the logs for username and systemId
+        return dashboardQueue.stream()
+                .filter(entry -> username.equals(entry.get("username")) && systemId.equals(entry.get("systemId")))
+                .collect(Collectors.toList());
+    }
+
 }

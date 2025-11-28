@@ -1,0 +1,237 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./CSS/dashboard3.css">
+    <script src="JS/dashboard.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>HWINFO Dashboard</title>
+</head>
+<body>
+    <section class="navPanel">
+        <div class="header">
+            <header>
+                Navigation Panel
+            </header>
+        </div>
+        <nav>
+            <a href="index.html" class="active">Home</a>
+            <a href="dashboard.html">RT dashboard</a>
+            <a href="AdvancedSearch.html">Adv Search</a>
+        </nav>
+    </section>
+    <section class="pageDesPanel">
+        <div class="header">
+            <header>
+                System Hardware Monitoring Dashboard
+            </header>
+        </div>
+        <div class="sysPanel" id="statePanel">
+            <div class="statepanel1" id="systemState">
+
+            </div>
+            <div class="statePanel1" id="coreThermalThrottling">
+
+            </div>
+            <div class="statePanel1" id="GPUOptimalPerformance">
+
+            </div>
+        </div>
+        <div class="sysPanel">
+            <div id="coreClocks">
+                <canvas id="coreClocksChart"></canvas>
+            </div>
+            <div id="ringClocks">
+                <canvas id="ringClocksChart"></canvas>
+            </div>
+            <div id="coreVID">
+                <canvas id="coreVIDChart"></canvas>
+            </div>
+            <div id="coreUsage">
+                <canvas id="coreUsageChart"></canvas>
+            </div>
+            <div id="packageTemp">
+                <canvas id="packageTempChart"></canvas>
+            </div>
+            <div id="packagePower">
+                <canvas id="packagePowerChart"></canvas>
+            </div>
+            <div id="coreTemp">
+                <canvas id="coreTempChart"></canvas>
+            </div>
+            <div id="distToTjMAX">
+                <canvas id="distToTjMAXChart"></canvas>
+            </div>
+            <div id="Pl1">
+                <canvas id="Pl1Chart"></canvas>
+            </div>
+            <div id="PL2">
+                <canvas id="PL2Chart"></canvas>
+            </div>
+            <div id="CPU_Fan">
+                <canvas id="CPUFanSpeedChart"></canvas>
+            </div>
+            <div id="GPU_Fan">
+                <canvas id="GPUFanSpeedChart"></canvas>
+            </div>
+
+            <!-- GPU METRICS -->
+            <div id="GPU_Temperature">
+                <canvas id="GPUTemperatureChart"></canvas>
+            </div>
+            <div id="GPU_Core_Voltage">
+                <canvas id="GPUCoreVoltageChart"></canvas>
+            </div>
+            <div id="GPU_Power">
+                <canvas id="GPUPowerChart"></canvas>
+            </div>
+            <div id="GPU_Clock">
+                <canvas id="GPUClockChart"></canvas>
+            </div>
+            <div id="GPU_Core_Load">
+                <canvas id="GPUCoreLoadChart"></canvas>
+            </div>
+            <div id="GPU_Memory_Usage">
+                <canvas id="GPUMemoryUsageChart"></canvas>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
+
+
+<!-- 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HWInfo Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+        }
+        canvas {
+            background: #2a2a2a;
+            padding: 10px;
+            border-radius: 10px;
+        }
+        .warning {
+            background: red;
+            padding: 10px;
+            color: white;
+            font-size: 20px;
+            margin-bottom: 10px;
+            display: none; /* Hidden by default */
+        }
+    </style>
+</head>
+<body>
+    <h1>HWInfo Dashboard</h1>
+    <div id="warning" class="warning">⚠️ Thermal Throttling Detected!</div>
+    <div class="container">
+        <canvas id="barChart"></canvas>
+    </div>
+
+    <script>
+        const MAX_VALUES = {
+            "Core_VIDs_avg_V": 1.5,
+            "Core_Clocks_avg_MHz": 5000,
+            "Ring_LLC_Clock_MHz": 5000,
+            "Core_Usage_avg_percent": 100,
+            "Core_Temperatures_avg_C": 100,
+            "CPU_Package_C": 100,
+            "Core_Distance_to_TjMAX_avg_C": 100,
+            "CPU_Package_Power_W": 200,
+            "PL1_Power_Limit_Dynamic_W": 140,
+            "PL2_Power_Limit_Dynamic_W": 190
+        };
+
+        function getBarColor(name, value) {
+            if (name === "CPU Package Temp") {
+                return value > 90 ? "red" : value > 70 ? "orange" : "green";
+            } else if (name === "Core Usage") {
+                return value > 80 ? "red" : value > 50 ? "yellow" : "green";
+            } else if (name === "Package Power") {
+                return value > 150 ? "red" : value > 100 ? "orange" : "green";
+            } else if (name === "Distance to TjMAX") {
+                return value < 20 ? "red" : value > 40 ? "green" : "orange";
+            }
+            return "green";
+        }
+
+        let ctx = document.getElementById("barChart").getContext("2d");
+        let barChart = new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: [], // Names of parameters
+                datasets: [{
+                    label: "Value",
+                    data: [], // Values of parameters
+                    backgroundColor: [],
+                    borderColor: "white",
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                indexAxis: 'y', // Horizontal bars
+                responsive: true,
+                scales: {
+                    x: { ticks: { color: "white" }, max: 100 },
+                    y: { ticks: { color: "white" } }
+                }
+            }
+        });
+
+        async function fetchData() {
+            try {
+                const response = await fetch("http://localhost:5000/dashboard");
+                const data = await response.json();
+                if (data.length === 0) return;
+
+                let latestData = data[data.length - 1]; // Get latest entry
+
+                // Check if thermal throttling is active
+                document.getElementById("warning").style.display =
+                    latestData.Core_Thermal_Throttling === 1.0 ? "block" : "none";
+
+                // Prepare data for graph
+                let graphData = [
+                    { name: "Core VID", value: latestData.Core_VIDs_avg_V, max: MAX_VALUES["Core_VIDs_avg_V"] },
+                    { name: "Core Clocks", value: latestData.Core_Clocks_avg_MHz, max: MAX_VALUES["Core_Clocks_avg_MHz"] },
+                    { name: "Ring Clocks", value: latestData.Ring_LLC_Clock_MHz, max: MAX_VALUES["Ring_LLC_Clock_MHz"] },
+                    { name: "Core Usage", value: latestData.Core_Usage_avg_percent, max: MAX_VALUES["Core_Usage_avg_percent"] },
+                    { name: "CPU Core Temp", value: latestData.Core_Temperatures_avg_C, max: MAX_VALUES["Core_Temperatures_avg_C"] },
+                    { name: "CPU Package Temp", value: latestData.CPU_Package_C, max: MAX_VALUES["CPU_Package_C"] },
+                    { name: "Distance to TjMAX", value: latestData.Core_Distance_to_TjMAX_avg_C, max: MAX_VALUES["Core_Distance_to_TjMAX_avg_C"] },
+                    { name: "Package Power", value: latestData.CPU_Package_Power_W, max: MAX_VALUES["CPU_Package_Power_W"] },
+                    { name: "PL1 Dynamic Power", value: latestData.PL1_Power_Limit_Dynamic_W, max: MAX_VALUES["PL1_Power_Limit_Dynamic_W"] },
+                    { name: "PL2 Dynamic Power", value: latestData.PL2_Power_Limit_Dynamic_W, max: MAX_VALUES["PL2_Power_Limit_Dynamic_W"] }
+                ];
+
+                // Update chart data
+                barChart.data.labels = graphData.map(d => d.name);
+                barChart.data.datasets[0].data = graphData.map(d => d.value);
+                barChart.data.datasets[0].backgroundColor = graphData.map(d => getBarColor(d.name, d.value));
+
+                // Update the chart
+                barChart.update();
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        }
+
+        fetchData(); // Initial fetch
+        setInterval(fetchData, 2000); // Fetch every 2 seconds
+    </script>
+</body>
+</html> -->
