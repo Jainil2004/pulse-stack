@@ -4,11 +4,13 @@
 /* Dark gradient background */
 body {
     background: linear-gradient(to bottom, #13133e, #3e3e49);
+    background-attachment: fixed;
     color: #e0e0e0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     display: flex;
     padding: 2%;
     margin: 0;
+    min-height: 100vh;
 }
 
 /* Navigation Panel - Fixed position */
@@ -33,7 +35,7 @@ body {
     border-radius: 20px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
     padding: 2%;
-    min-height: 250vh; /* Ensures it covers full height */
+    min-height: 370vh; /* Ensures it covers full height */
 }
 
 /* Headers */
