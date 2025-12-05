@@ -1,5 +1,15 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const systemId = '5c8ef9fc-67d3-418d-9330-8c535b86efd8';
+    // Extract systemId from URL query parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const systemId = urlParams.get('systemId');
+    
+    if (!systemId) {
+        console.error("No systemId provided in URL");
+        alert("No system selected. Redirecting to system management page.");
+        window.location.href = "system.html";
+        return;
+    }
+    
     const apiUrl = `http://localhost:8081/api/systems/dashboard/live/${systemId}`;
     // http://localhost:8081/api/systems/dashboard/live/5c8ef9fc-67d3-418d-9330-8c535b86efd8
 

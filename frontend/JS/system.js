@@ -215,7 +215,7 @@ async function fetchSystems() {
         <td style="font-weight: bold;">${system.name}</td>
         <td>${system.registeredAt || "-"}</td>
         <td>
-          <button onclick="viewDetails('${system.name}')" style="background-color: rgba(34, 139, 34, 0.8);">RT Dashboard</button>
+          <button onclick="openDashboard('${system.systemId}')" style="background-color: rgba(34, 139, 34, 0.8);">RT Dashboard</button>
           <button onclick="updateSystem('${system.name}')" style="background-color: rgba(255, 165, 0, 0.8);">Update Machine Name</button>
           <button onclick="deleteSystem('${system.name}')" style="background-color: rgba(220, 20, 60, 0.8);">Remove Machine</button>
         </td>
@@ -272,43 +272,9 @@ function updateSystem(name) {
   window.location.href = `update_system.html?name=${encodeURIComponent(name)}`;
 }
 
-async function viewDetails(name) {
-  const token = localStorage.getItem("token");
-  
-  try {
-    const res = await fetch(`${BASE_URL}/api/systems/get/${name}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-
-    if (res.status === 401 || res.status === 403) {
-      throw new Error("Session expired or access denied");
-    }
-
-    if (!res.ok) throw new Error("Failed to fetch details");
-    
-    const data = await res.json();
-    
-    // Create a more visually appealing alert with system details
-    const details = `
-🖥️ SYSTEM DETAILS
-
-📋 Name: ${data.name}
-🆔 System ID: ${data.systemId}
-📅 Registered: ${data.registeredAt || 'N/A'}
- 
-    `;
-    
-    alert(details);
-  } catch (err) {
-    if (err.message.includes("Session expired")) {
-      alert("Session expired. Please log in again.");
-      localStorage.removeItem("token");
-      window.location.href = "auth.html";
-    } else {
-      alert("Failed to fetch system details");
-    }
-    console.error(err);
-  }
+function openDashboard(systemId) {
+  // Redirect to dashboard.html with systemId as query parameter
+  window.location.href = `dashboard.html?systemId=${systemId}`;
 }
 
 // Initialize the page
