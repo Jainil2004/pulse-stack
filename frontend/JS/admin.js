@@ -131,7 +131,7 @@ async function changeRole(id) {
         "Content-Type": "application/x-www-form-urlencoded",
         Authorization: `Bearer ${token}`,
       },
-      body: new URLSearchParams({ newRole: role }), // 🔥 fixed here
+      body: new URLSearchParams({ newRole: role }), 
     });
 
     if (!res.ok) {

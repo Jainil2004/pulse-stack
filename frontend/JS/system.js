@@ -1,5 +1,14 @@
 const BASE_URL = "http://localhost:8081";
 
+function updateNavVisibility(role) {
+  const advancedAnalyticsLink = document.querySelector('a[href="http://localhost:5601"]');
+  if (advancedAnalyticsLink) {
+    if (role != "ADMIN") {
+      advancedAnalyticsLink.style.display = "none";
+    }
+  }
+}
+
 async function loadUserDetails() {
   const token = localStorage.getItem("token");
 
@@ -29,6 +38,8 @@ async function loadUserDetails() {
     const data = await res.json();
     document.getElementById("userDetails").innerHTML =
       `Welcome <strong>${data.username}</strong>, System Role: <strong>${data.role}</strong>`;
+      
+    updateNavVisibility(data.role);
 
   } catch (err) {
     console.error("Error fetching user info:", err.message);

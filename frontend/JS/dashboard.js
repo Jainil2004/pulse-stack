@@ -37,8 +37,6 @@ document.addEventListener("DOMContentLoaded", function () {
         {id: "GPUClockChart", label: "GPU Core Clocks", key: "GPU_Clock", max: 3000},
         {id: "GPUCoreLoadChart", label: "GPU Core Load", key: "GPU_Core_Load", max: 100},
         {id: "GPUMemoryUsageChart", label: "GPU Memory Usage", key: "GPU_Memory_Usage", max: 100}
-
-
     ];
     
     function getBarColor(label, value) {

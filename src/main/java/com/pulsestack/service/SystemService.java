@@ -38,7 +38,7 @@ public class SystemService {
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final ObjectMapper objectMapper;
     private final ConcurrentLinkedQueue<Map<String, Object>> dashboardQueue = new ConcurrentLinkedQueue<>();
-    private static final int MAX_QUEUE_SIZE = 100;
+    private static final int MAX_QUEUE_SIZE = 20;
 
     @Autowired
     public SystemService(SystemRepository systemRepository, UserRepository userRepository, JwtService jwtService, PasswordEncoder passwordEncoder, KafkaTemplate<String, String> kafkaTemplate, ObjectMapper objectMapper) {
